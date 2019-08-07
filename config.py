@@ -10,17 +10,16 @@ class DefaultConfig(object):
     data_root = '/Users/gofinge/Documents/DATA/'
     train_data_list = './data/trainSet.csv'
     load_model_path = None
-    classes = ['Atelectasis', 'Cardiomegaly', 'Pleural Effusion', 'Consolidation', 'Edema']
+    classes = ['Atelectasis', 'Cardiomegaly', 'Pleural Effusion', 'Consolidation', 'Edema', 'Pneumonia']
 
-    batch_size = 10  # batch size
+    batch_size = 16  # batch size
     use_gpu = False  # user GPU or not
     num_workers = 2  # how many workers for loading data
     check_freq = 2000  # check model performance every N batch
 
-    debug_file = '/tmp/debug'  # if os.path.exists(debug_file): enter ipdb
     result_file = 'result.csv'
 
-    max_epoch = 3
+    max_epoch = 4
     lr = 0.0001  # initial learning rate
     betas = (0.9, 0.999)
     eps = 1e-08
@@ -33,10 +32,10 @@ def parse(self, kwargs):
      update Config through kwargs
     """
     if kwargs:
-        for k, v in kwargs.iteritems():
+        for k in kwargs:
             if not hasattr(self, k):
                 warnings.warn("Warning: opt has not attribut %s" % k)
-            setattr(self, k, v)
+            setattr(self, k, kwargs[k])
 
         print('user config:')
         for k, v in self.__class__.__dict__.iteritems():

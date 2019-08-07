@@ -85,7 +85,7 @@ def train(**kwargs):
     print(' ٩( ᐛ )و - Start training ......')
     print('---------------------------------\n')
     for epoch in range(opt.max_epoch):
-        print('(๑•̀ㅂ•́)و✧ - Epoch', epoch + 1, ':')
+        print('(๑•̀ㅂ•́)و✧ - Epoch', epoch + 1)
         model.train()
         total_batch = int(len(train_data) / opt.batch_size)
 
@@ -115,9 +115,9 @@ def train(**kwargs):
                         'state_dict': model.state_dict(),
                         'optimizer': optimizer.state_dict()},
                        './checkpoints/m_' + time_end + '.pth.tar')
-            print('(˃̶ᗜ˂̶)✩ Epoch [' + str(epoch + 1) + '] [save] [' + time_end + '] loss= ' + str(loss_mean))
+            print('(˃̶ᗜ˂̶)✩ Epoch [' + str(epoch + 1) + '] [save] [m_' + time_end + '] loss= ' + str(loss_mean))
         else:
-            print('(இωஇ) Epoch [' + str(epoch + 1) + '] [----] [' + time_end + '] loss= ' + str(loss_mean))
+            print('(இωஇ) Epoch [' + str(epoch + 1) + '] [----] [m_' + time_end + '] loss= ' + str(loss_mean))
         print('------------------------------------------------------------------------------------\n')
 
 
@@ -150,7 +150,7 @@ def _generate_model():
     model = getattr(models, opt.model)(len(opt.classes))
 
     if opt.load_model_path:
-        load_model_path = os.path.join('./checkpoint_pth', opt.load_model_path)
+        load_model_path = os.path.join('./checkpoints', opt.load_model_path)
         assert os.path.isfile(load_model_path), 'No checkpoint found.'
         print('Loading checkpoint......')
         checkpoint = torch.load(load_model_path)
@@ -190,4 +190,18 @@ def _write_csv(results, file_name):
 
 
 if __name__ == '__main__':
-    train()
+    print('--- CheXpert Baseline Classifier ---')
+    mission = int(input('Please select mission. (1 - Train; 2 - Test)   '))
+    assert mission in [1, 2], 'Wrong mission order.'
+    checkpoint = int(input('Whether import checkpoint? (1 - Yes; 2 - No)    '))
+    assert checkpoint in [1, 2], 'Wrong mission order.'
+
+    if checkpoint == 1:
+        checkpoint = input('Please input checkpoint file name.')
+    else:
+        checkpoint = None
+
+    if mission == 1:
+        train()
+    elif mission == 2:
+        test()

@@ -81,11 +81,11 @@ def train(**kwargs):
     loss_mean_min = 1e100
 
     # train
-    print('\n------------------------------')
-    print('|  Start training ......')
-    print('------------------------------\n')
+    print('\n---------------------------------')
+    print(' ٩( ᐛ )و - Start training ......')
+    print('---------------------------------\n')
     for epoch in range(opt.max_epoch):
-        print('Epoch -', epoch + 1, ':')
+        print('(๑•̀ㅂ•́)و✧ - Epoch', epoch + 1, ':')
         model.train()
         total_batch = int(len(train_data) / opt.batch_size)
 
@@ -115,9 +115,9 @@ def train(**kwargs):
                         'state_dict': model.state_dict(),
                         'optimizer': optimizer.state_dict()},
                        './checkpoints/m_' + time_end + '.pth.tar')
-            print('Epoch [' + str(epoch + 1) + '] [save] [' + time_end + '] loss= ' + str(loss_mean))
+            print('(˃̶ᗜ˂̶)✩ Epoch [' + str(epoch + 1) + '] [save] [' + time_end + '] loss= ' + str(loss_mean))
         else:
-            print('Epoch [' + str(epoch + 1) + '] [----] [' + time_end + '] loss= ' + str(loss_mean))
+            print('(இωஇ) Epoch [' + str(epoch + 1) + '] [----] [' + time_end + '] loss= ' + str(loss_mean))
         print('------------------------------------------------------------------------------------\n')
 
 

@@ -1,4 +1,4 @@
-# CheXpert_baseline_reborn
+# CheXpert Baseline PyTorch
 
 ## 0. Update remark
 - 2019.08.07

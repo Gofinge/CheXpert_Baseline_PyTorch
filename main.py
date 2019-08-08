@@ -22,11 +22,16 @@ def test(**kwargs):
     model = _generate_model()
 
     # data
-    test_data = ChestXrayDataSet(opt.data_root, opt.train_data_list, mode='test')
+    test_data = ChestXrayDataSet(opt.data_root, opt.test_data_list, mode='test')
     test_dataloader = DataLoader(test_data, batch_size=opt.batch_size, shuffle=False, num_workers=opt.num_workers)
     total_batch = int(len(test_data) / opt.batch_size)
     gt = torch.FloatTensor()
     pred = torch.FloatTensor()
+
+    # test
+    print('\n---------------------------------')
+    print(' ٩( ᐛ )و - Start testing ......')
+    print('---------------------------------\n')
 
     if opt.use_gpu:
         gt = gt.cuda()
@@ -37,8 +42,8 @@ def test(**kwargs):
         bar = tqdm(enumerate(test_dataloader), total=total_batch)
         for i, (data, label) in bar:
             bs, n_crops, c, h, w = data.size()
-            ipt = inp.view(-1, c, h, w)
             inp = data.clone().detach()
+            inp = inp.view(-1, c, h, w)
             target = label.clone().detach()
             if opt.use_gpu:
                 inp = inp.cuda()
@@ -118,7 +123,7 @@ def train(**kwargs):
             print('(˃̶ᗜ˂̶)✩ Epoch [' + str(epoch + 1) + '] [save] [m_' + time_end + '] loss= ' + str(loss_mean))
         else:
             print('(இωஇ) Epoch [' + str(epoch + 1) + '] [----] [m_' + time_end + '] loss= ' + str(loss_mean))
-        print('------------------------------------------------------------------------------------\n')
+        print('--------------------------------------------------------------------------\n')
 
 
 def _val(model, dataloader, criterion, total_batch):
@@ -149,17 +154,22 @@ def _val(model, dataloader, criterion, total_batch):
 def _generate_model():
     model = getattr(models, opt.model)(len(opt.classes))
 
+    if opt.use_gpu:
+        model.cuda()
+        torch.backends.cudnn.benchmark = True
+    model = torch.nn.DataParallel(model)
+
     if opt.load_model_path:
+        print('--------------------------------------------------------------------------\n')
         load_model_path = os.path.join('./checkpoints', opt.load_model_path)
         assert os.path.isfile(load_model_path), 'No checkpoint found.'
         print('Loading checkpoint......')
         checkpoint = torch.load(load_model_path)
+        # checkpoint = torch.load(load_model_path, map_location='cpu')
         model.load_state_dict(checkpoint['state_dict'])
         print('Done')
+        print('--------------------------------------------------------------------------\n')
 
-    if opt.use_gpu:
-        model.cuda()
-    model = torch.nn.DataParallel(model)
     return model
 
 
@@ -197,11 +207,11 @@ if __name__ == '__main__':
     assert checkpoint in [1, 2], 'Wrong mission order.'
 
     if checkpoint == 1:
-        checkpoint = input('Please input checkpoint file name.')
+        checkpoint = input('Please input checkpoint file name.  ')
     else:
         checkpoint = None
 
     if mission == 1:
-        train()
+        train(load_model_path=checkpoint)
     elif mission == 2:
-        test()
+        test(load_model_path=checkpoint)

@@ -14,7 +14,7 @@ import time
 from data.dataset import ChestXrayDataSet
 import models
 from config import opt
-
+from data import preprocess
 
 def test(**kwargs):
     opt.parse(kwargs)
@@ -22,37 +22,37 @@ def test(**kwargs):
     model = _generate_model()
 
     # data
-    test_data = ChestXrayDataSet(opt.data_root, opt.test_data_list, mode='test')
+    test_data = ChestXrayDataSet(opt.data_root, opt.test_data_list, mode='train')
     test_dataloader = DataLoader(test_data, batch_size=opt.batch_size, shuffle=False, num_workers=opt.num_workers)
     total_batch = int(len(test_data) / opt.batch_size)
     gt = torch.FloatTensor()
     pred = torch.FloatTensor()
+
+    if opt.use_gpu:
+        gt = gt.cuda()
+        pred = pred.cuda()
 
     # test
     print('\n---------------------------------')
     print(' ٩( ᐛ )و - Start testing ......')
     print('---------------------------------\n')
 
-    if opt.use_gpu:
-        gt = gt.cuda()
-        pred = pred.cuda()
-
     model.eval()
     with torch.no_grad():
         bar = tqdm(enumerate(test_dataloader), total=total_batch)
         for i, (data, label) in bar:
-            bs, n_crops, c, h, w = data.size()
+            # bs, n_crops, c, h, w = data.size()
             inp = data.clone().detach()
-            inp = inp.view(-1, c, h, w)
+            # inp = inp.view(-1, c, h, w)
             target = label.clone().detach()
             if opt.use_gpu:
                 inp = inp.cuda()
                 target = target.cuda()
 
             output = model(inp)
-            output_mean = output.view(bs, n_crops, -1).mean(1)
+            # output_mean = output.view(bs, n_crops, -1).mean(1)
             gt = torch.cat((gt, target), 0)
-            pred = torch.cat((pred, output_mean.data), 0)
+            pred = torch.cat((pred, output.data), 0)
 
     AUROCs = compute_AUCs(gt, pred)
     AUROC_avg = np.array(AUROCs).mean()
@@ -160,7 +160,6 @@ def _generate_model():
     model = torch.nn.DataParallel(model)
 
     if opt.load_model_path:
-        print('--------------------------------------------------------------------------\n')
         load_model_path = os.path.join('./checkpoints', opt.load_model_path)
         assert os.path.isfile(load_model_path), 'No checkpoint found.'
         print('Loading checkpoint......')
@@ -168,7 +167,6 @@ def _generate_model():
         # checkpoint = torch.load(load_model_path, map_location='cpu')
         model.load_state_dict(checkpoint['state_dict'])
         print('Done')
-        print('--------------------------------------------------------------------------\n')
 
     return model
 
@@ -201,8 +199,8 @@ def _write_csv(results, file_name):
 
 if __name__ == '__main__':
     print('--- CheXpert Baseline Classifier ---')
-    mission = int(input('Please select mission. (1 - Train; 2 - Test)   '))
-    assert mission in [1, 2], 'Wrong mission order.'
+    mission = int(input('Please select mission. (1 - Train; 2 - Test, 3 - Preprocess)   '))
+    assert mission in [1, 2, 3], 'Wrong mission order.'
     checkpoint = int(input('Whether import checkpoint? (1 - Yes; 2 - No)    '))
     assert checkpoint in [1, 2], 'Wrong mission order.'
 
@@ -215,3 +213,5 @@ if __name__ == '__main__':
         train(load_model_path=checkpoint)
     elif mission == 2:
         test(load_model_path=checkpoint)
+    elif mission == 3:
+        preprocess()

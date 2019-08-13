@@ -39,8 +39,9 @@ class ChestXrayDataSet(Dataset):
 
             if mode == 'train':
                 transform = transforms.Compose([
-                    transforms.RandomResizedCrop(320),
-                    transforms.RandomHorizontalFlip(),
+                    transforms.Resize([320, 320]),
+                    # transforms.RandomResizedCrop(320),
+                    # transforms.RandomHorizontalFlip(),
                     transforms.ToTensor(),
                     normalize,
                 ])

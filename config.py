@@ -7,7 +7,7 @@ import warnings
 class DefaultConfig(object):
     model = 'densenet121'
 
-    data_root = '/Users/gofinge/Documents/DATA/'
+    data_root = '/home/gofinge/Documents/Data/'
     train_data_list = './data/trainSet.csv'
     valid_data_list = './data/validSet.csv'
     test_data_list = './data/testSet.csv'
@@ -15,7 +15,7 @@ class DefaultConfig(object):
     classes = ['Atelectasis', 'Cardiomegaly', 'Pleural Effusion', 'Consolidation', 'Edema', 'Pneumonia']
 
     batch_size = 16  # batch size
-    use_gpu = False  # user GPU or not
+    use_gpu = True  # user GPU or not
     num_workers = 2  # how many workers for loading data
     check_freq = 2000  # check model performance every N batch
 

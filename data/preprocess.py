@@ -8,22 +8,22 @@ def preprocess():
 
 
 def train_set():
-    dataset_name = 'train.csv'
+    dataset_name = './data/train.csv'
     trainSet = load_dataset(dataset_name)
 
-    trainSet.to_csv('trainSet.csv', header=False, index=False, sep=' ')
+    trainSet.to_csv('./data/trainSet.csv', header=False, index=False, sep=' ')
 
 
 def val_test_set():
-    dataset_name = 'valid.csv'
+    dataset_name = './data/valid.csv'
     dataset = load_dataset(dataset_name)
     nrow = len(dataset)
     val_row = int(nrow / 2)
     validSet = dataset[0: val_row]
     testSet = dataset[val_row: nrow]
 
-    validSet.to_csv('validSet.csv', header=False, index=False, sep=' ')
-    testSet.to_csv('testSet.csv', header=False, index=False, sep=' ')
+    validSet.to_csv('./data/validSet.csv', header=False, index=False, sep=' ')
+    testSet.to_csv('./data/testSet.csv', header=False, index=False, sep=' ')
 
 
 def load_dataset(dataset_name):

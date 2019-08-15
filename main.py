@@ -16,6 +16,7 @@ import models
 from config import opt
 from data import preprocess
 
+
 def test(**kwargs):
     opt.parse(kwargs)
     # configure model
@@ -71,9 +72,10 @@ def train(**kwargs):
 
     # step2: data
     train_data = ChestXrayDataSet(opt.data_root, opt.train_data_list, mode='train')
+    val_data = ChestXrayDataSet(opt.data_root, opt.valid_data_list_data_list, mode='train')
     train_dataloader = DataLoader(train_data, opt.batch_size,
                                   shuffle=True, num_workers=opt.num_workers)
-    val_dataloader = DataLoader(train_data, opt.batch_size,
+    val_dataloader = DataLoader(val_data, opt.batch_size,
                                 shuffle=False, num_workers=opt.num_workers)
 
     # step3: criterion and optimizer
@@ -163,8 +165,8 @@ def _generate_model():
         load_model_path = os.path.join('./checkpoints', opt.load_model_path)
         assert os.path.isfile(load_model_path), 'No checkpoint found.'
         print('Loading checkpoint......')
-        checkpoint = torch.load(load_model_path)
-        # checkpoint = torch.load(load_model_path, map_location='cpu')
+        # checkpoint = torch.load(load_model_path)
+        checkpoint = torch.load(load_model_path, map_location='cpu')
         model.load_state_dict(checkpoint['state_dict'])
         print('Done')
 

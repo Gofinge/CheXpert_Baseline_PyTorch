@@ -45,4 +45,3 @@ class DefaultConfig(object):
 
 
 opt = DefaultConfig()
-

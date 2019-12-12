@@ -5,7 +5,6 @@ import os
 import torch
 from torch.utils.data import DataLoader
 from torch.optim.lr_scheduler import ReduceLROnPlateau
-import torch.nn as nn
 from sklearn.metrics import roc_auc_score
 import numpy as np
 import pandas as pd
@@ -72,7 +71,7 @@ def train(**kwargs):
 
     # step2: data
     train_data = ChestXrayDataSet(opt.data_root, opt.train_data_list, mode='train')
-    val_data = ChestXrayDataSet(opt.data_root, opt.valid_data_list_data_list, mode='train')
+    val_data = ChestXrayDataSet(opt.data_root, opt.valid_data_list, mode='train')
     train_dataloader = DataLoader(train_data, opt.batch_size,
                                   shuffle=True, num_workers=opt.num_workers)
     val_dataloader = DataLoader(val_data, opt.batch_size,

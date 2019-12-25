@@ -13,7 +13,7 @@ def densenet121(num_classes, pretrained=False, **kwargs):
     num_features = model.classifier.in_features
     model.classifier = nn.Sequential(
         nn.Linear(num_features, num_features),
-        nn.Dropout(p=0.9),
+        nn.Dropout(p=0.1),
         nn.Linear(num_features, num_classes),
         nn.Sigmoid()
     )
@@ -26,7 +26,7 @@ def densenet169(num_classes, pretrained=False, **kwargs):
     num_features = model.classifier.in_features
     model.classifier = nn.Sequential(
         nn.Linear(num_features, num_features),
-        nn.Dropout(p=0.9),
+        nn.Dropout(p=0.1),
         nn.Linear(num_features, num_classes),
         nn.Sigmoid()
     )
@@ -39,7 +39,7 @@ def densenet201(num_classes, pretrained=False, **kwargs):
     num_features = model.classifier.in_features
     model.classifier = nn.Sequential(
         nn.Linear(num_features, num_features),
-        nn.Dropout(p=0.9),
+        nn.Dropout(p=0.1),
         nn.Linear(num_features, num_classes),
         nn.Sigmoid()
 

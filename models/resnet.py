@@ -14,7 +14,7 @@ def resnet50(num_classes, pretrained=False, **kwargs):
     model.fc = nn.Sequential(
         nn.Linear(num_features, num_features),
         nn.ReLU(inplace=True),
-        nn.Dropout(p=0.9),
+        nn.Dropout(p=0.1),
         nn.Linear(num_features, num_classes),
         nn.Sigmoid()
     )
@@ -28,7 +28,7 @@ def resnet101(num_classes, pretrained=False, **kwargs):
     model.fc = nn.Sequential(
         nn.Linear(num_features, num_features),
         nn.ReLU(inplace=True),
-        nn.Dropout(p=0.9),
+        nn.Dropout(p=0.1),
         nn.Linear(num_features, num_classes),
         nn.Sigmoid()
     )
@@ -42,7 +42,7 @@ def resnet152(num_classes, pretrained=False, **kwargs):
     model.fc = nn.Sequential(
         nn.Linear(num_features, num_features),
         nn.ReLU(inplace=True),
-        nn.Dropout(p=0.9),
+        nn.Dropout(p=0.1),
         nn.Linear(num_features, num_classes),
         nn.Sigmoid()
     )

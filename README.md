@@ -9,6 +9,10 @@ I am trying to repeat the CheXpert baseline model and doing some research on Pne
 
 The baseline model have been trained. The result is almost same as the paper said.
 
+- 2020.05.29
+
+**Note: The project is my first deep learning project by Torch. Maybe it is naive, but it would be helpful if you are also new to PyTorch! If so, I also recomment my new project [Vision Research Toolkit by PyTorch](https://github.com/Gofinge/Vision_Research_Toolkit_by_PyTorch), which will be a powful tool in your way of learning PyTorch**
+
 ## 1. How to run the code.
 
 -> run 'main.py'
